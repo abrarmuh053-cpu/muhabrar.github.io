@@ -1,0 +1,654 @@
+/* ============================================================
+   CREATOR PORTFOLIO — styles.css
+   ============================================================
+   1. TOKENS (CSS Variables)
+   2. RESET & BASE
+   3. AMBIENT BACKGROUND + NOISE
+   4. LAYOUT WRAPPER
+   5. NAV PILL
+   6. HERO / PROFILE
+   7. SECTION LABEL
+   8. CARD BASE
+   9. SOCIAL GRID
+  10. BRAND COLLABORATION
+  11. PORTFOLIO GRID
+  12. CONTACT
+  13. CTA STRIP
+  14. SCROLL-REVEAL ANIMATION
+  15. RESPONSIVE
+   ============================================================ */
+
+
+/* ─────────────────────────────────────────────
+   1. TOKENS
+   ───────────────────────────────────────────── */
+:root {
+  /* colours */
+  --clr-bg:          #0f0f14;
+  --clr-card:        rgba(255, 255, 255, 0.035);
+  --clr-card-hover:  rgba(255, 255, 255, 0.065);
+  --clr-border:      rgba(255, 255, 255, 0.07);
+  --clr-text:        #e8e8ef;
+  --clr-muted:       rgba(232, 232, 239, 0.5);
+  --clr-accent1:     #a78bfa;   /* purple  */
+  --clr-accent2:     #60a5fa;   /* blue    */
+  --clr-accent3:     #f472b6;   /* pink    */
+
+  /* shadows */
+  --shadow-card:     0 8px 40px rgba(0, 0, 0, 0.25);
+  --shadow-glow:     0 0 60px rgba(167, 139, 250, 0.12);
+
+  /* layout */
+  --radius:          22px;
+
+  /* typography */
+  --font-display:    'Playfair Display', Georgia, serif;
+  --font-body:       'DM Sans', system-ui, sans-serif;
+}
+
+
+/* ─────────────────────────────────────────────
+   2. RESET & BASE
+   ───────────────────────────────────────────── */
+* {
+  margin:      0;
+  padding:     0;
+  box-sizing:  border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family:              var(--font-body);
+  background:               var(--clr-bg);
+  color:                    var(--clr-text);
+  min-height:               100vh;
+  overflow-x:               hidden;
+  -webkit-font-smoothing:   antialiased;
+}
+
+
+/* ─────────────────────────────────────────────
+   3. AMBIENT BACKGROUND + NOISE
+   ───────────────────────────────────────────── */
+
+/* two drifting radial blobs */
+.bg-ambient {
+  position:       fixed;
+  inset:          0;
+  z-index:        0;
+  pointer-events: none;
+}
+
+.bg-ambient::before {
+  content:    '';
+  position:   absolute;
+  top:        -30%;
+  left:       -20%;
+  width:      80vw;
+  height:     80vw;
+  background: radial-gradient(circle, rgba(167, 139, 250, 0.13) 0%, transparent 70%);
+  filter:     blur(40px);
+  animation:  driftA 12s ease-in-out infinite alternate;
+}
+
+.bg-ambient::after {
+  content:    '';
+  position:   absolute;
+  bottom:     -25%;
+  right:      -15%;
+  width:      70vw;
+  height:     70vw;
+  background: radial-gradient(circle, rgba(96, 165, 250, 0.1) 0%, transparent 70%);
+  filter:     blur(50px);
+  animation:  driftB 15s ease-in-out infinite alternate;
+}
+
+@keyframes driftA {
+  to { transform: translate(6%, 4%) scale(1.05); }
+}
+
+@keyframes driftB {
+  to { transform: translate(-5%, -3%) scale(1.08); }
+}
+
+/* subtle SVG noise texture overlay */
+.noise {
+  position:          fixed;
+  inset:             0;
+  z-index:           1;
+  pointer-events:    none;
+  opacity:           0.028;
+  background-image:  url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:   256px 256px;
+}
+
+
+/* ─────────────────────────────────────────────
+   4. LAYOUT WRAPPER
+   ───────────────────────────────────────────── */
+.wrapper {
+  position:   relative;
+  z-index:    2;
+  max-width:  780px;
+  margin:     0 auto;
+  padding:    0 22px 80px;
+}
+
+
+/* ─────────────────────────────────────────────
+   5. NAV PILL (sticky floating nav)
+   ───────────────────────────────────────────── */
+nav {
+  position:        sticky;
+  top:             18px;
+  z-index:         100;
+  display:         flex;
+  justify-content: center;
+  padding-top:     28px;
+}
+
+.nav-pill {
+  background:            rgba(15, 15, 20, 0.72);
+  backdrop-filter:       blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border:                1px solid var(--clr-border);
+  border-radius:         50px;
+  padding:               10px 8px;
+  display:               flex;
+  gap:                   4px;
+  box-shadow:            var(--shadow-card);
+}
+
+.nav-pill a {
+  color:           var(--clr-muted);
+  text-decoration: none;
+  font-size:       0.78rem;
+  font-weight:     500;
+  letter-spacing:  0.04em;
+  text-transform:  uppercase;
+  padding:         7px 18px;
+  border-radius:   50px;
+  transition:      all 0.3s ease;
+  white-space:     nowrap;
+}
+
+.nav-pill a:hover,
+.nav-pill a.active {
+  color:      #fff;
+  background: rgba(167, 139, 250, 0.18);
+}
+
+
+/* ─────────────────────────────────────────────
+   6. HERO / PROFILE
+   ───────────────────────────────────────────── */
+.hero {
+  margin-top: 52px;
+  text-align: center;
+  animation: fadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* avatar ring + avatar circle */
+.avatar-wrap {
+  width:    120px;
+  height:   120px;
+  margin:   0 auto 24px;
+  position: relative;
+}
+
+/* gradient border ring */
+.avatar-wrap::before {
+  content:       '';
+  position:      absolute;
+  inset:         -3px;
+  border-radius: 50%;
+  background:    linear-gradient(135deg, var(--clr-accent1), var(--clr-accent2), var(--clr-accent3));
+  z-index:       0;
+}
+
+.avatar {
+  position:        relative;
+  z-index:         1;
+  width:           100%;
+  height:          100%;
+  border-radius:   50%;
+  background:      linear-gradient(135deg, #2e2440, #1a2035);
+  border:          3px solid var(--clr-bg);
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  font-size:       2.6rem;
+}
+
+/* name */
+.hero h1 {
+  font-family:     var(--font-display);
+  font-size:       2.1rem;
+  font-weight:     700;
+  letter-spacing:  -0.02em;
+  color:           #fff;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color:      var(--clr-accent1);
+}
+
+/* one-liner description */
+.hero .tagline {
+  color:       var(--clr-muted);
+  font-size:   0.95rem;
+  font-weight: 300;
+  margin-top:  6px;
+  max-width:   420px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.5;
+}
+
+/* skill / info badges */
+.badge-row {
+  display:         flex;
+  flex-wrap:       wrap;
+  justify-content: center;
+  gap:             8px;
+  margin-top:      18px;
+}
+
+.badge {
+  background:      rgba(167, 139, 250, 0.1);
+  border:          1px solid rgba(167, 139, 250, 0.22);
+  color:           var(--clr-accent1);
+  font-size:       0.72rem;
+  font-weight:     600;
+  letter-spacing:  0.06em;
+  text-transform:  uppercase;
+  padding:         5px 14px;
+  border-radius:   50px;
+}
+
+
+/* ─────────────────────────────────────────────
+   7. SECTION LABEL  (e.g. "Social Media ———")
+   ───────────────────────────────────────────── */
+.section-label {
+  font-size:       0.68rem;
+  font-weight:     600;
+  letter-spacing:  0.18em;
+  text-transform:  uppercase;
+  color:           var(--clr-muted);
+  margin-bottom:   14px;
+  display:         flex;
+  align-items:     center;
+  gap:             10px;
+}
+
+/* trailing line */
+.section-label::after {
+  content:    '';
+  flex:       1;
+  height:     1px;
+  background: linear-gradient(90deg, var(--clr-border), transparent);
+}
+
+
+/* ─────────────────────────────────────────────
+   8. CARD BASE  (shared by every card)
+   ───────────────────────────────────────────── */
+.card {
+  background:            var(--clr-card);
+  border:                1px solid var(--clr-border);
+  border-radius:         var(--radius);
+  box-shadow:            var(--shadow-card);
+  backdrop-filter:       blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition:            background 0.35s ease,
+                         transform  0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                         box-shadow 0.35s ease;
+}
+
+.card:hover {
+  background:  var(--clr-card-hover);
+  transform:   translateY(-3px);
+  box-shadow:  var(--shadow-card), var(--shadow-glow);
+}
+
+/* shared section spacing */
+.section {
+  margin-top: 36px;
+}
+
+
+/* ─────────────────────────────────────────────
+   9. SOCIAL GRID
+   ───────────────────────────────────────────── */
+.social-grid {
+  display:               grid;
+  grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+  gap:                   12px;
+}
+
+.social-card {
+  display:         flex;
+  flex-direction:  column;
+  align-items:     center;
+  justify-content: center;
+  gap:             10px;
+  padding:         28px 14px;
+  text-decoration: none;
+  cursor:          pointer;
+}
+
+/* icon box */
+.social-card .icon-wrap {
+  width:           48px;
+  height:          48px;
+  border-radius:   14px;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  font-size:       1.4rem;
+  transition:      transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.social-card:hover .icon-wrap {
+  transform: scale(1.12) rotate(-4deg);
+}
+
+/* text */
+.social-card .label  { font-size: 0.82rem; font-weight: 600; color: #fff; }
+.social-card .handle { font-size: 0.72rem; color: var(--clr-muted); margin-top: 1px; }
+
+/* per-platform icon-box gradients */
+.soc-ig .icon-wrap { background: linear-gradient(135deg, #f9ce34, #ee2a7b, #6228d7); }
+.soc-yt .icon-wrap { background: linear-gradient(135deg, #ff0000, #cc0000); }
+.soc-tw .icon-wrap { background: linear-gradient(135deg, #1da1f2, #0077b6); }
+.soc-tk .icon-wrap { background: linear-gradient(135deg, #010101, #25f4ee); }
+.soc-li .icon-wrap { background: linear-gradient(135deg, #0077b5, #00a0dc); }
+.soc-gh .icon-wrap { background: linear-gradient(135deg, #24292e, #586069); }
+
+
+/* ─────────────────────────────────────────────
+  10. BRAND COLLABORATION
+   ───────────────────────────────────────────── */
+.collab-card {
+  padding:     34px 30px;
+  display:     flex;
+  gap:         28px;
+  align-items: center;
+}
+
+/* emoji icon box */
+.collab-card .collab-icon {
+  flex-shrink:     0;
+  width:           68px;
+  height:          68px;
+  border-radius:   18px;
+  background:      linear-gradient(135deg, rgba(167, 139, 250, 0.2), rgba(96, 165, 250, 0.15));
+  border:          1px solid rgba(167, 139, 250, 0.2);
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  font-size:       1.8rem;
+}
+
+.collab-card h3 {
+  font-family:   var(--font-display);
+  font-size:     1.15rem;
+  color:         #fff;
+  margin-bottom: 6px;
+}
+
+.collab-card p {
+  font-size:  0.85rem;
+  color:      var(--clr-muted);
+  line-height: 1.6;
+}
+
+/* service tags */
+.collab-card .tag-row {
+  display:    flex;
+  flex-wrap:  wrap;
+  gap:        6px;
+  margin-top: 12px;
+}
+
+.collab-card .tag {
+  font-size:      0.7rem;
+  font-weight:    500;
+  background:     rgba(96, 165, 250, 0.1);
+  border:         1px solid rgba(96, 165, 250, 0.2);
+  color:          var(--clr-accent2);
+  padding:        3px 12px;
+  border-radius:  50px;
+}
+
+
+/* ─────────────────────────────────────────────
+  11. PORTFOLIO GRID
+   ───────────────────────────────────────────── */
+.portfolio-grid {
+  display:               grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap:                   14px;
+}
+
+.port-card {
+  overflow: hidden;
+  cursor:   pointer;
+}
+
+/* thumbnail area (aspect-ratio driven) */
+.port-thumb {
+  width:           100%;
+  aspect-ratio:    16 / 10;
+  position:        relative;
+  overflow:        hidden;
+}
+
+/* coloured gradient placeholder */
+.port-thumb .thumb-bg {
+  width:      100%;
+  height:     100%;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.port-card:hover .thumb-bg {
+  transform: scale(1.06);
+}
+
+/* dark overlay with "View Project" pill */
+.port-thumb .overlay {
+  position:   absolute;
+  inset:      0;
+  background: linear-gradient(180deg, transparent 30%, rgba(15, 15, 20, 0.85));
+  display:    flex;
+  align-items: flex-end;
+  padding:    16px;
+  opacity:    0;
+  transition: opacity 0.3s ease;
+}
+
+.port-card:hover .overlay {
+  opacity: 1;
+}
+
+.overlay .view-btn {
+  font-size:       0.7rem;
+  font-weight:     600;
+  letter-spacing:  0.08em;
+  text-transform:  uppercase;
+  color:           #fff;
+  background:      rgba(167, 139, 250, 0.25);
+  border:          1px solid rgba(167, 139, 250, 0.35);
+  backdrop-filter: blur(6px);
+  padding:         5px 14px;
+  border-radius:   50px;
+}
+
+/* project title row */
+.port-info        { padding: 16px 18px 18px; }
+.port-info h4     { font-size: 0.88rem; font-weight: 600; color: #fff; }
+.port-info span   { font-size: 0.73rem; color: var(--clr-muted); }
+
+/* six unique gradient thumbs */
+.thumb-1 { background: linear-gradient(135deg, #1e1b4b, #312e81, #4c1d95); }
+.thumb-2 { background: linear-gradient(135deg, #0c4a6e, #075985, #38bdf8); }
+.thumb-3 { background: linear-gradient(135deg, #4a1942, #6f1d51, #db2777); }
+.thumb-4 { background: linear-gradient(135deg, #14532d, #15803d, #4ade80); }
+.thumb-5 { background: linear-gradient(135deg, #451a03, #92400e, #f59e0b); }
+.thumb-6 { background: linear-gradient(135deg, #312e81, #1e40af, #60a5fa); }
+
+
+/* ─────────────────────────────────────────────
+  12. CONTACT
+   ───────────────────────────────────────────── */
+.contact-card {
+  padding:    36px 30px;
+  text-align: center;
+}
+
+.contact-card h3 {
+  font-family:   var(--font-display);
+  font-size:     1.35rem;
+  color:         #fff;
+  margin-bottom: 8px;
+}
+
+.contact-card > p {
+  color:       var(--clr-muted);
+  font-size:   0.87rem;
+  line-height: 1.6;
+  max-width:   440px;
+  margin:      0 auto 24px;
+}
+
+/* button row */
+.contact-row {
+  display:         flex;
+  flex-wrap:       wrap;
+  justify-content: center;
+  gap:             10px;
+}
+
+.contact-btn {
+  display:         flex;
+  align-items:     center;
+  gap:             8px;
+  background:      rgba(167, 139, 250, 0.1);
+  border:          1px solid rgba(167, 139, 250, 0.25);
+  color:           #fff;
+  text-decoration: none;
+  font-size:       0.82rem;
+  font-weight:     500;
+  padding:         10px 22px;
+  border-radius:   50px;
+  transition:      background 0.3s,
+                   transform  0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                   box-shadow 0.3s;
+  cursor:          pointer;
+}
+
+.contact-btn:hover {
+  background: rgba(167, 139, 250, 0.22);
+  transform:  translateY(-2px);
+  box-shadow: 0 6px 24px rgba(167, 139, 250, 0.18);
+}
+
+.contact-btn .btn-icon {
+  font-size: 1rem;
+}
+
+
+/* ─────────────────────────────────────────────
+  13. CTA STRIP  (media-kit download)
+   ───────────────────────────────────────────── */
+.cta-strip {
+  margin-top:    28px;
+  padding:       30px;
+  border-radius: var(--radius);
+  background:    linear-gradient(135deg, rgba(167, 139, 250, 0.12), rgba(96, 165, 250, 0.08));
+  border:        1px solid rgba(167, 139, 250, 0.15);
+  text-align:    center;
+}
+
+.cta-strip p {
+  color:         var(--clr-muted);
+  font-size:     0.84rem;
+  line-height:   1.6;
+  margin-bottom: 16px;
+}
+
+.cta-strip p strong {
+  color: #fff;
+}
+
+.cta-main-btn {
+  display:         inline-flex;
+  align-items:     center;
+  gap:             8px;
+  background:      linear-gradient(135deg, var(--clr-accent1), var(--clr-accent2));
+  color:           #fff;
+  text-decoration: none;
+  font-size:       0.82rem;
+  font-weight:     600;
+  padding:         12px 30px;
+  border-radius:   50px;
+  border:          none;
+  cursor:          pointer;
+  box-shadow:      0 4px 24px rgba(167, 139, 250, 0.3);
+  transition:      transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                   box-shadow 0.3s;
+}
+
+.cta-main-btn:hover {
+  transform:  translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 32px rgba(167, 139, 250, 0.4);
+}
+
+
+/* ─────────────────────────────────────────────
+  14. SCROLL-REVEAL ANIMATION
+   ───────────────────────────────────────────── */
+.reveal {
+  opacity:    0;
+  transform:  translateY(22px);
+  transition: opacity   0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.visible {
+  opacity:   1;
+  transform: translateY(0);
+}
+
+
+/* ─────────────────────────────────────────────
+  15. RESPONSIVE
+   ───────────────────────────────────────────── */
+
+/* ── tablet / small desktop ── */
+@media (max-width: 520px) {
+  .wrapper              { padding: 0 14px 60px; }
+  .nav-pill a           { font-size: 0.7rem; padding: 6px 13px; }
+  .hero h1              { font-size: 1.7rem; }
+  .collab-card          { flex-direction: column; text-align: center; padding: 28px 20px; }
+  .collab-card .tag-row { justify-content: center; }
+  .portfolio-grid       { grid-template-columns: 1fr 1fr; }
+  .social-grid          { grid-template-columns: repeat(3, 1fr); }
+  .contact-card         { padding: 28px 18px; }
+}
+
+/* ── very small phones ── */
+@media (max-width: 340px) {
+  .portfolio-grid { grid-template-columns: 1fr; }
+  .social-grid    { grid-template-columns: repeat(2, 1fr); }
+}
